@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State var currentMenuSelection = 0
+    @ObservedObject var playlistModel = MyPlaylistViewModel()
     
     let menuItems: [MenuItem] = [
         .init(menuName:"Home", menuImage:"house"),
@@ -24,11 +25,11 @@ struct ContentView: View {
             )
             switch currentMenuSelection {
             case 1:
-                Text("Not yet implemented - coming soon")
+                ResultsView(playlistModel: playlistModel)
             case 2:
                 Text("Not yet implemented - coming soon")
             default:
-                MainView()
+                MainView(playlistModel: playlistModel)
             }
         }
         .frame(minWidth: 300, minHeight: 200)
@@ -73,7 +74,7 @@ struct MenuView: View {
 }
 
 struct MainView: View {
-    @ObservedObject var playlistModel = MyPlaylistViewModel()
+    let playlistModel: MyPlaylistViewModel
     
     var body: some View {
         VStack {
@@ -81,12 +82,24 @@ struct MainView: View {
             Button("Extract library") {
                 playlistModel.generateSongList()
             }
-            
+//            NavigationLink(destination: ResultsView(playlistModel: playlistModel), label: {Text("Extract library")})
             if !playlistModel.songs.isEmpty {
-                List(playlistModel.songs, id: \.self) {
-                    song in Text(song)
-                }
+                Text("check the results tab")
             }
+        }
+    }
+}
+
+struct ResultsView: View {
+    let playlistModel: MyPlaylistViewModel
+
+    var body: some View {
+        if !playlistModel.songs.isEmpty {
+            List(playlistModel.songs, id: \.self) {
+                song in Text(song)
+            }
+        } else {
+            Text("no results")
         }
     }
 }
