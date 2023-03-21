@@ -46,28 +46,17 @@ struct MenuView: View {
     @Binding var currentMenuSelection: Int
     
     var body: some View {
-        VStack {
+        VStack (alignment: .leading) {
             let current = menuItems[currentMenuSelection]
             ForEach(menuItems.indices, id: \.self) {index in
                 let item = menuItems[index]
-                HStack {
-                    Image(systemName: item.menuImage)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 20)
-                    
-                    /*@START_MENU_TOKEN@*/Text(item.menuName)/*@END_MENU_TOKEN@*/
-                        .foregroundColor(current == item ?
-                                         Color(.green) : Color(.labelColor)
-                        )
-                    Spacer()
-                }
-                .padding()
-                .onTapGesture {
-                    self.currentMenuSelection = index
-                }
+                Label(item.menuName, systemImage: item.menuImage)
+                    .foregroundColor(current == item ? Color(.green) : Color(.labelColor))
+                    .padding()
+                    .onTapGesture {
+                        self.currentMenuSelection = index
+                    }
             }
-
             Spacer()
         }
     }
@@ -82,9 +71,10 @@ struct MainView: View {
             Button("Extract library") {
                 playlistModel.generateSongList()
             }
-//            NavigationLink(destination: ResultsView(playlistModel: playlistModel), label: {Text("Extract library")})
             if !playlistModel.songs.isEmpty {
                 Text("check the results tab")
+            } else {
+                ProgressView()
             }
         }
     }
