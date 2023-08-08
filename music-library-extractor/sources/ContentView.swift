@@ -18,19 +18,19 @@ struct ContentView: View {
     ]
     
     var body: some View {
-        NavigationView {
+        NavigationView{
             MenuView(
                 menuItems: menuItems,
                 currentMenuSelection: $currentMenuSelection
             )
             switch currentMenuSelection {
-            case 1:
-                ResultsView(playlistModel: playlistModel)
-            case 2:
-                Text("Not yet implemented - coming soon")
-            default:
-                MainView(playlistModel: playlistModel)
-            }
+                case 1:
+                    ResultsView(playlistModel: playlistModel)
+                case 2:
+                    Text("Not yet implemented - coming soon")
+                default:
+                    MainView(playlistModel: playlistModel)
+                }
         }
         .frame(minWidth: 300, minHeight: 200)
     }
@@ -101,8 +101,8 @@ class MyPlaylistViewModel: ObservableObject {
         do {
             let library = try ITLibrary(apiVersion: "1.0")
             var songArray = [String]()
-            for item in library.allMediaItems {
-                let song = "\(item.title) by \(String(describing: item.artist))"
+            for item: ITLibMediaItem in library.allMediaItems {
+                let song = "\(item.title) from \(item.album.title ?? "unknown") by \(item.artist?.name ?? "unknown")"
                 songArray.append(song)
             }
             DispatchQueue.main.async {
