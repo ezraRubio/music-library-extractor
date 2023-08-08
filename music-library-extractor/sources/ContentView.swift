@@ -29,8 +29,8 @@ struct ContentView: View {
                 case 2:
                     Text("Not yet implemented - coming soon")
                 default:
-                    MainView(playlistModel: playlistModel)
-                }
+                    MainView(playlistModel: playlistModel, currentMenuSelection: $currentMenuSelection)
+            }
         }
         .frame(minWidth: 300, minHeight: 200)
     }
@@ -64,12 +64,14 @@ struct MenuView: View {
 
 struct MainView: View {
     let playlistModel: MyPlaylistViewModel
+    @Binding var currentMenuSelection: Int
     
     var body: some View {
         VStack {
             Text("My music library")
             Button("Extract library") {
                 playlistModel.generateSongList()
+                self.currentMenuSelection = 1
             }
             if !playlistModel.songs.isEmpty {
                 Text("check the results tab")
