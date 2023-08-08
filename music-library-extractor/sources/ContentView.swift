@@ -18,11 +18,12 @@ struct ContentView: View {
     ]
     
     var body: some View {
-        NavigationView{
+        NavigationSplitView{
             MenuView(
                 menuItems: menuItems,
                 currentMenuSelection: $currentMenuSelection
             )
+        } detail: {
             switch currentMenuSelection {
                 case 1:
                     ResultsView(playlistModel: playlistModel)
@@ -32,6 +33,7 @@ struct ContentView: View {
                     MainView(playlistModel: playlistModel, currentMenuSelection: $currentMenuSelection)
             }
         }
+        .navigationTitle("Music Library Extractor")
         .frame(minWidth: 300, minHeight: 200)
     }
 }
@@ -68,15 +70,24 @@ struct MainView: View {
     
     var body: some View {
         VStack {
-            Text("My music library")
-            Button("Extract library") {
-                playlistModel.generateSongList {
-                    self.currentMenuSelection = 1
+            Text("Tool for extracting your music library from Apple's Music App")
+                .padding()
+                .bold()
+
+            if !playlistModel.songs.isEmpty {
+                Spacer()
+                Text("check the results tab")
+            } else {
+                Text("Click in the button below to start")
+                    .padding()
+                Spacer()
+                Button("Extract Library") {
+                    playlistModel.generateSongList {
+                        self.currentMenuSelection = 1
+                    }
                 }
             }
-            if !playlistModel.songs.isEmpty {
-                Text("check the results tab")
-            }
+            Spacer()
         }
     }
 }
@@ -90,7 +101,7 @@ struct ResultsView: View {
                 song in Text(song)
             }
         } else {
-            Text("no results")
+            Text("No library extracted yet.")
         }
     }
 }
