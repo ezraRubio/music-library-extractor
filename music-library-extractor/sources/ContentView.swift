@@ -70,13 +70,12 @@ struct MainView: View {
         VStack {
             Text("My music library")
             Button("Extract library") {
-                playlistModel.generateSongList()
-                self.currentMenuSelection = 1
+                playlistModel.generateSongList {
+                    self.currentMenuSelection = 1
+                }
             }
             if !playlistModel.songs.isEmpty {
                 Text("check the results tab")
-            } else {
-                ProgressView()
             }
         }
     }
@@ -99,17 +98,21 @@ struct ResultsView: View {
 class MyPlaylistViewModel: ObservableObject {
     @Published var songs : [String] = []
     
-    func generateSongList(){
+    func generateSongList(completion: @escaping () -> Void){
         do {
             let library = try ITLibrary(apiVersion: "1.0")
             var songArray = [String]()
+
             for item: ITLibMediaItem in library.allMediaItems {
                 let song = "\(item.title) from \(item.album.title ?? "unknown") by \(item.artist?.name ?? "unknown")"
                 songArray.append(song)
             }
+
             DispatchQueue.main.async {
                 self.songs = songArray
+                completion()
             }
+
         } catch {
             print ("Error Initializing iTunes Library: \(error.localizedDescription)")
         }
