@@ -18,20 +18,22 @@ struct ContentView: View {
     ]
     
     var body: some View {
-        NavigationView{
+        NavigationSplitView{
             MenuView(
                 menuItems: menuItems,
                 currentMenuSelection: $currentMenuSelection
             )
+        } detail: {
             switch currentMenuSelection {
                 case 1:
                     ResultsView(playlistModel: playlistModel)
                 case 2:
                     Text("Not yet implemented - coming soon")
                 default:
-                    MainView(playlistModel: playlistModel)
-                }
+                    MainView(playlistModel: playlistModel, currentMenuSelection: $currentMenuSelection)
+            }
         }
+        .navigationTitle("Music Library Extractor")
         .frame(minWidth: 300, minHeight: 200)
     }
 }
@@ -64,18 +66,28 @@ struct MenuView: View {
 
 struct MainView: View {
     let playlistModel: MyPlaylistViewModel
+    @Binding var currentMenuSelection: Int
     
     var body: some View {
         VStack {
-            Text("My music library")
-            Button("Extract library") {
-                playlistModel.generateSongList()
-            }
+            Text("Tool for extracting your music library from Apple's Music App")
+                .padding()
+                .bold()
+
             if !playlistModel.songs.isEmpty {
+                Spacer()
                 Text("check the results tab")
             } else {
-                ProgressView()
+                Text("Click in the button below to start")
+                    .padding()
+                Spacer()
+                Button("Extract Library") {
+                    playlistModel.generateSongList {
+                        self.currentMenuSelection = 1
+                    }
+                }
             }
+            Spacer()
         }
     }
 }
@@ -89,7 +101,7 @@ struct ResultsView: View {
                 song in Text(song)
             }
         } else {
-            Text("no results")
+            Text("No library extracted yet.")
         }
     }
 }
@@ -97,17 +109,21 @@ struct ResultsView: View {
 class MyPlaylistViewModel: ObservableObject {
     @Published var songs : [String] = []
     
-    func generateSongList(){
+    func generateSongList(completion: @escaping () -> Void){
         do {
             let library = try ITLibrary(apiVersion: "1.0")
             var songArray = [String]()
+
             for item: ITLibMediaItem in library.allMediaItems {
                 let song = "\(item.title) from \(item.album.title ?? "unknown") by \(item.artist?.name ?? "unknown")"
                 songArray.append(song)
             }
+
             DispatchQueue.main.async {
                 self.songs = songArray
+                completion()
             }
+
         } catch {
             print ("Error Initializing iTunes Library: \(error.localizedDescription)")
         }
