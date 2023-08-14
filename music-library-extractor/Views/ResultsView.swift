@@ -12,8 +12,11 @@ struct ResultsView: View {
 
     var body: some View {
         if !libraryViewModel.songs.isEmpty {
-            List(libraryViewModel.songs, id: \.self) {
-                song in Text(song)
+            Table(libraryViewModel.mediaItems) {
+                TableColumn("Title", value: \.title)
+                TableColumn("Artist", value: \.artist)
+                TableColumn("Album", value: \.album)
+                TableColumn("Genre", value: \.genre)
             }
         } else {
             Text("No library extracted yet.")

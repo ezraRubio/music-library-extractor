@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ExportView: View {
     @StateObject var viewModel = ExportViewViewModel()
+    @ObservedObject var libraryViewModel: LibraryViewModel
     
     var body: some View {
         VStack {
@@ -31,12 +32,14 @@ struct ExportView: View {
                 Toggle("Sample Rate", isOn: $viewModel.includeSampleRate)
                 Toggle("Purchased", isOn: $viewModel.includePurchased)
             }
+            
+            Spacer()
         }
     }
 }
 
 struct ExportView_Previews: PreviewProvider {
     static var previews: some View {
-        ExportView()
+        ExportView(libraryViewModel: LibraryViewModel())
     }
 }

@@ -6,17 +6,20 @@
 //
 
 import Foundation
+import AppKit
 
-struct Song {
+struct Song: Identifiable {
     let title: String
     let artist: String
     let album: String
     let genre: String
-    let totalTime: String
-    let trackNumber: String
-    let sampleRate: String
-    let artwork: String
-    let purchased: String
-    let releaseDate: String
-    let releaseYear: String
+    let totalTime: Int
+    let trackNumber: Int
+    let sampleRate: Int
+    let artwork: NSImage
+    let purchased: Bool
+    let releaseDate: Date
+    let releaseYear: Int
+    
+    let id = UUID()
 }
