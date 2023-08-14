@@ -19,7 +19,7 @@ struct MenuNavigationView: View {
                 case 1:
                     ResultsView(libraryViewModel: libraryViewModel)
                 case 2:
-                    SettingsView()
+                    ExportView()
                 default:
                     MainView(libraryViewModel: libraryViewModel, currentMenuSelection: $currentMenuSelection)
             }
