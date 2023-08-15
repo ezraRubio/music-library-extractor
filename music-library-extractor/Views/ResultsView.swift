@@ -9,11 +9,18 @@ import SwiftUI
 
 struct ResultsView: View {
     @ObservedObject var libraryViewModel: LibraryViewModel
+    @State private var sortOrder = [KeyPathComparator(\Song.title), KeyPathComparator(\Song.artist), KeyPathComparator(\Song.album), KeyPathComparator(\Song.genre)]
 
     var body: some View {
         if !libraryViewModel.songs.isEmpty {
-            List(libraryViewModel.songs, id: \.self) {
-                song in Text(song)
+            Table(libraryViewModel.mediaItems, sortOrder: $sortOrder) {
+                TableColumn("Title", value: \.title)
+                TableColumn("Artist", value: \.artist)
+                TableColumn("Album", value: \.album)
+                TableColumn("Genre", value: \.genre)
+            }
+            .onChange(of: sortOrder) {
+                libraryViewModel.mediaItems.sort(using: $0)
             }
         } else {
             Text("No library extracted yet.")
