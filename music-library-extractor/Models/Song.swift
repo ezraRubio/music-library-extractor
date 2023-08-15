@@ -8,7 +8,7 @@
 import Foundation
 import AppKit
 
-struct Song: Identifiable {
+struct Song: Codable, Identifiable {
     let title: String
     let artist: String
     let album: String
@@ -16,10 +16,9 @@ struct Song: Identifiable {
     let totalTime: Int
     let trackNumber: Int
     let sampleRate: Int
-    let artwork: NSImage
     let purchased: Bool
     let releaseDate: Date
     let releaseYear: Int
     
-    let id = UUID()
+    var id = UUID()
 }

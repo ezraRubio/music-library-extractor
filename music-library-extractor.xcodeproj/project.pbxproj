@@ -74,6 +74,7 @@
 		D0C621EB29C1114F0018B359 /* music-library-extractor */ = {
 			isa = PBXGroup;
 			children = (
+				D0CD9B7F2A8B627500A658D0 /* New Group */,
 				D0D6AB292A8501A600D4CD17 /* Models */,
 				D0D6AB282A85019E00D4CD17 /* Navigation */,
 				D0D6AB272A85018C00D4CD17 /* ViewModels */,
@@ -117,6 +118,13 @@
 				D0C621FE29C122C70018B359 /* iTunesLibrary.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D0CD9B7F2A8B627500A658D0 /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "New Group";
 			sourceTree = "<group>";
 		};
 		D0D6AB262A85018500D4CD17 /* Views */ = {

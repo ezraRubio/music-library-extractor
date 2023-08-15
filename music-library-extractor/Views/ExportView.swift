@@ -13,6 +13,8 @@ struct ExportView: View {
     
     var body: some View {
         VStack {
+            Spacer()
+            Text("Select what data you want to include on your export: ")
             HStack {
                 Toggle("Title", isOn: $viewModel.includeTitle)
                 Toggle("Artist", isOn: $viewModel.includeArtist)
@@ -22,7 +24,6 @@ struct ExportView: View {
             HStack {
                 Toggle("Album", isOn: $viewModel.includeAlbum)
                 Toggle("Track Number", isOn: $viewModel.includeTrackNumber)
-                Toggle("Artwork", isOn: $viewModel.includeArtwork)
             }
             HStack {
                 Toggle("Release Date", isOn: $viewModel.includeReleaseDate)
@@ -33,6 +34,14 @@ struct ExportView: View {
                 Toggle("Purchased", isOn: $viewModel.includePurchased)
             }
             
+            Spacer()
+            Button("Export as .csv") {
+                viewModel.exportCSV(libraryViewModel.mediaItems)
+            }
+            .disabled(libraryViewModel.mediaItems.isEmpty)
+            if libraryViewModel.mediaItems.isEmpty {
+                Text("First you have to extract the music library.")
+            }
             Spacer()
         }
     }
