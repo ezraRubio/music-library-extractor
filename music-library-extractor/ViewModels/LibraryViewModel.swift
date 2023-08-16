@@ -13,7 +13,7 @@ class LibraryViewModel: ObservableObject {
     @Published var songs : [String] = []
     @Published var mediaItems : [Song] = []
     
-    func generateSongList(completion: @escaping () -> Void){
+    func generateSongList(completion: @escaping () -> Void) -> Void {
         do {
             let library = try ITLibrary(apiVersion: "1.0")
             var songArray = [String]()
@@ -27,7 +27,6 @@ class LibraryViewModel: ObservableObject {
                     totalTime: item.totalTime,
                     trackNumber: item.trackNumber,
                     sampleRate: item.sampleRate,
-                    artwork: item.artwork?.image ?? NSImage(),
                     purchased: item.isPurchased,
                     releaseDate: item.releaseDate ?? Date(),
                     releaseYear: item.year

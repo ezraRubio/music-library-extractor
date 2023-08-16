@@ -9,17 +9,16 @@ import Foundation
 import AppKit
 
 struct Song: Identifiable {
-    let title: String
-    let artist: String
-    let album: String
-    let genre: String
-    let totalTime: Int
-    let trackNumber: Int
-    let sampleRate: Int
-    let artwork: NSImage
-    let purchased: Bool
-    let releaseDate: Date
-    let releaseYear: Int
+    var title: String
+    var artist: String
+    var album: String
+    var genre: String
+    var totalTime: Int
+    var trackNumber: Int
+    var sampleRate: Int
+    var purchased: Bool
+    var releaseDate: Date
+    var releaseYear: Int
     
-    let id = UUID()
+    var id = UUID()
 }
