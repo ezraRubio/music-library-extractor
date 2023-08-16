@@ -29,20 +29,70 @@ class ExportViewViewModel: ObservableObject {
         
 
         let headers = declareCsvHeaders()
-        let filePath = NSHomeDirectory() + "/Desktop/Songs.csv"
-        let isFileCreated = createFile(filePath)
-        let encoder = CSVEncoder { $0.headers = headers }
+        let data = prepareData(headers, items)
+//        let filePath = NSHomeDirectory() + "/Desktop/Songs.csv"
+//        let isFileCreated = createFile(filePath)
+
 
         do {
-            if isFileCreated {
-//                try encoder.encode(<#T##value: Encodable##Encodable#>, into: <#T##Data.Type#>)
-            } else {
-                print("there was an error creating the file.")
+            let writer = try CSVWriter{$0.headers = headers}
+            for row in data {
+                try writer.write(row: row.values)
             }
+            try writer.endEncoding()
+            let result = try writer.data()
         } catch {
             print("Data encoding failed: \(error)")
         }
 
+    }
+    
+    private func prepareData(_ headers: [String], _ items: [Song]) -> [[String : String]] {
+        var tmpArrayDict: [[String : String]] = [[:]]
+        
+        for item in items {
+            var tmpDict: [String : String] = [:]
+            
+            for header in headers {
+                tmpDict[header] = getSongProperty(headers, header, item)
+            }
+            
+            tmpArrayDict.append(tmpDict)
+        }
+        
+        tmpArrayDict.removeFirst()
+        return tmpArrayDict
+    }
+    
+    private func getSongProperty(_ headers: [String], _ header: String, _ item: Song) -> String {
+        let index = headers.firstIndex(of: header)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/YY"
+        
+        switch index {
+        case 0:
+            return item.title
+        case 1:
+            return item.artist
+        case 2:
+            return item.album
+        case 3:
+            return item.genre
+        case 4:
+            return String(item.totalTime)
+        case 5:
+            return String(item.trackNumber)
+        case 6:
+            return String(item.sampleRate)
+        case 7:
+            return String(item.purchased)
+        case 8:
+            return dateFormatter.string(from: item.releaseDate)
+        case 9:
+            return String(item.releaseYear)
+        default:
+            return "unkown"
+        }
     }
     
     private func createFile(_ filePath: String) -> Bool {
