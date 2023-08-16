@@ -26,28 +26,27 @@ class ExportViewViewModel: ObservableObject {
             print("extract library first")
             return
         }
-        
 
         let headers = declareCsvHeaders()
-        let data = prepareData(headers, items)
+        var data = prepareData(headers, items)
         
         let fm = FileManager.default
         guard let url = fm.urls(for: .downloadsDirectory, in: .userDomainMask).first else { return }
-        print("current directory: \(url))")
         let filePath = url.appendingPathComponent("Results")
-        let fileData = "trololol, lulz".data(using: .utf8)
-        print("file creation path: \(filePath.path)")
-
 
         do {
             try fm.createDirectory(at: filePath, withIntermediateDirectories: false)
 
             let writer = try CSVWriter{$0.headers = headers}
-            for row in data {
-                try writer.write(row: row.values)
+            for dict in data {
+                let row = headers.map { header in
+                    dict[header] ?? ""
+                }
+                try writer.write(row: row)
             }
             try writer.endEncoding()
             let result = try writer.data()
+            
             try result.write(to: filePath.appendingPathComponent("songs.csv"))
         } catch {
             print("Data encoding failed: \(error)")
@@ -56,19 +55,19 @@ class ExportViewViewModel: ObservableObject {
     }
     
     private func prepareData(_ headers: [String], _ items: [Song]) -> [[String : String]] {
-        var tmpArrayDict: [[String : String]] = [[:]]
+        var tmpArrayDict: [[String : String]] = []
         
         for item in items {
-            var tmpDict: [String : String] = [:]
-            
+            var tmpDict: [(String, String)] = []
+
             for header in headers {
-                tmpDict[header] = getSongProperty(headers, header, item)
+                let propertyValue = getSongProperty(headers, header, item)
+                tmpDict.append((header, propertyValue))
             }
-            
-            tmpArrayDict.append(tmpDict)
+
+            tmpArrayDict.append(Dictionary(uniqueKeysWithValues: tmpDict))
         }
         
-        tmpArrayDict.removeFirst()
         return tmpArrayDict
     }
     
