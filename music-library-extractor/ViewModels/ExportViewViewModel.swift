@@ -30,17 +30,25 @@ class ExportViewViewModel: ObservableObject {
 
         let headers = declareCsvHeaders()
         let data = prepareData(headers, items)
-//        let filePath = NSHomeDirectory() + "/Desktop/Songs.csv"
-//        let isFileCreated = createFile(filePath)
+        
+        let fm = FileManager.default
+        guard let url = fm.urls(for: .downloadsDirectory, in: .userDomainMask).first else { return }
+        print("current directory: \(url))")
+        let filePath = url.appendingPathComponent("Results")
+        let fileData = "trololol, lulz".data(using: .utf8)
+        print("file creation path: \(filePath.path)")
 
 
         do {
+            try fm.createDirectory(at: filePath, withIntermediateDirectories: false)
+
             let writer = try CSVWriter{$0.headers = headers}
             for row in data {
                 try writer.write(row: row.values)
             }
             try writer.endEncoding()
             let result = try writer.data()
+            try result.write(to: filePath.appendingPathComponent("songs.csv"))
         } catch {
             print("Data encoding failed: \(error)")
         }
@@ -93,10 +101,6 @@ class ExportViewViewModel: ObservableObject {
         default:
             return "unkown"
         }
-    }
-    
-    private func createFile(_ filePath: String) -> Bool {
-        return FileManager.default.createFile(atPath: filePath, contents: nil, attributes: nil)
     }
     
     private func declareCsvHeaders() -> [String] {
