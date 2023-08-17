@@ -9,16 +9,16 @@ import Foundation
 import CodableCSV
 
 class ExportViewViewModel: ObservableObject {
-    @Published var includeTitle: Bool = true
-    @Published var includeArtist: Bool = true
-    @Published var includeAlbum: Bool = true
-    @Published var includeGenre: Bool = true
-    @Published var includeTotalTime: Bool = true
-    @Published var includeTrackNumber: Bool = true
-    @Published var includeSampleRate: Bool = true
-    @Published var includePurchased: Bool = true
-    @Published var includeReleaseDate: Bool = true
-    @Published var includeReleaseYear: Bool = true
+    @Published var includeTitle: Bool = false
+    @Published var includeArtist: Bool = false
+    @Published var includeAlbum: Bool = false
+    @Published var includeGenre: Bool = false
+    @Published var includeTotalTime: Bool = false
+    @Published var includeTrackNumber: Bool = false
+    @Published var includeSampleRate: Bool = false
+    @Published var includePurchased: Bool = false
+    @Published var includeReleaseDate: Bool = false
+    @Published var includeReleaseYear: Bool = false
     
     
     func exportCSV(_ items: [Song]) -> Void {
@@ -28,7 +28,7 @@ class ExportViewViewModel: ObservableObject {
         }
 
         let headers = declareCsvHeaders()
-        var data = prepareData(headers, items)
+        let data = prepareData(headers, items)
         
         let fm = FileManager.default
         guard let url = fm.urls(for: .downloadsDirectory, in: .userDomainMask).first else { return }
@@ -61,7 +61,7 @@ class ExportViewViewModel: ObservableObject {
             var tmpDict: [(String, String)] = []
 
             for header in headers {
-                let propertyValue = getSongProperty(headers, header, item)
+                let propertyValue = getSongProperty(header, item)
                 tmpDict.append((header, propertyValue))
             }
 
@@ -71,34 +71,33 @@ class ExportViewViewModel: ObservableObject {
         return tmpArrayDict
     }
     
-    private func getSongProperty(_ headers: [String], _ header: String, _ item: Song) -> String {
-        let index = headers.firstIndex(of: header)
+    private func getSongProperty(_ header: String, _ item: Song) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd/MM/YY"
-        
-        switch index {
-        case 0:
+
+        switch header {
+        case "Title":
             return item.title
-        case 1:
+        case "Artist":
             return item.artist
-        case 2:
+        case "Album":
             return item.album
-        case 3:
+        case "Genre":
             return item.genre
-        case 4:
+        case "Length (ms)":
             return String(item.totalTime)
-        case 5:
+        case "Track #":
             return String(item.trackNumber)
-        case 6:
+        case "Sample Rate":
             return String(item.sampleRate)
-        case 7:
+        case "Purchased":
             return String(item.purchased)
-        case 8:
+        case "Release Date":
             return dateFormatter.string(from: item.releaseDate)
-        case 9:
+        case "Release Year":
             return String(item.releaseYear)
         default:
-            return "unkown"
+            return "unknown"
         }
     }
     
