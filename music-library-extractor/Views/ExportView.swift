@@ -17,31 +17,21 @@ struct ExportView: View {
             Text("Select what data you want to include on your export: ")
             HStack {
                 Toggle("Title", isOn: $viewModel.includeTitle)
-                    .disabled(true)
                 Toggle("Artist", isOn: $viewModel.includeArtist)
-                    .disabled(true)
                 Toggle("Genre", isOn: $viewModel.includeGenre)
-                    .disabled(true)
                 Toggle("Total Time", isOn: $viewModel.includeTotalTime)
-                    .disabled(true)
             }
             HStack {
                 Toggle("Album", isOn: $viewModel.includeAlbum)
-                    .disabled(true)
                 Toggle("Track Number", isOn: $viewModel.includeTrackNumber)
-                    .disabled(true)
             }
             HStack {
                 Toggle("Release Date", isOn: $viewModel.includeReleaseDate)
-                    .disabled(true)
                 Toggle("Released Year", isOn: $viewModel.includeReleaseYear)
-                    .disabled(true)
             }
             HStack {
                 Toggle("Sample Rate", isOn: $viewModel.includeSampleRate)
-                    .disabled(true)
                 Toggle("Purchased", isOn: $viewModel.includePurchased)
-                    .disabled(true)
             }
             
             Spacer()
