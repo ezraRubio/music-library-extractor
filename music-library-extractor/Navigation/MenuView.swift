@@ -11,7 +11,7 @@ struct MenuView: View {
     let menuItems: [MenuItem] = [
         .init(menuName:"Home", menuImage:"house"),
         .init(menuName:"Results", menuImage:"list.dash"),
-        .init(menuName:"Settings", menuImage:"gear"),
+        .init(menuName:"Export", menuImage:"square.and.arrow.up"),
     ]
     @Binding var currentMenuSelection: Int
     
