@@ -35,7 +35,9 @@ class ExportViewViewModel: ObservableObject {
         let filePath = url.appendingPathComponent("Results")
 
         do {
-            try fm.createDirectory(at: filePath, withIntermediateDirectories: false)
+            if !fm.fileExists(atPath: filePath.relativePath) {
+                try fm.createDirectory(at: filePath, withIntermediateDirectories: false)
+            }
 
             let writer = try CSVWriter{$0.headers = headers}
             for dict in data {
