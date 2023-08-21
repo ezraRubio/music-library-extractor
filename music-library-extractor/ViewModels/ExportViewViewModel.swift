@@ -9,7 +9,7 @@ import Foundation
 import CodableCSV
 
 class ExportViewViewModel: ObservableObject {
-    @Published var includeTitle: Bool = false
+    @Published var includeTitle: Bool = true
     @Published var includeArtist: Bool = false
     @Published var includeAlbum: Bool = false
     @Published var includeGenre: Bool = false
@@ -19,14 +19,23 @@ class ExportViewViewModel: ObservableObject {
     @Published var includePurchased: Bool = false
     @Published var includeReleaseDate: Bool = false
     @Published var includeReleaseYear: Bool = false
+    @Published var fileName: String = ""
+    @Published var error: String = ""
+    @Published var isFileCreated: Bool = false
     
     
     func exportCSV(_ items: [Song]) -> Void {
         guard !items.isEmpty else {
-            print("extract library first")
+            self.error = "extract library first"
             return
         }
-
+        
+        guard isValidFileName(fileName) else {
+            return
+        }
+        
+        self.isFileCreated = false
+        self.error = ""
         let headers = declareCsvHeaders()
         let data = prepareData(headers, items)
         
@@ -49,8 +58,14 @@ class ExportViewViewModel: ObservableObject {
             try writer.endEncoding()
             let result = try writer.data()
             
-            try result.write(to: filePath.appendingPathComponent("songs.csv"))
+            try result.write(to: filePath.appendingPathComponent("\(fileName).csv"))
+            self.isFileCreated = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                self.isFileCreated = false
+            }
+            self.fileName = ""
         } catch {
+            self.isFileCreated = false
             print("Data encoding failed: \(error)")
         }
 
@@ -138,5 +153,26 @@ class ExportViewViewModel: ObservableObject {
         }
         
         return headers
+    }
+    
+    private func isValidFileName(_ name: String) -> Bool {
+        if name.isEmpty {
+            self.error = "File name cannot be empty"
+            return false
+        }
+        
+        let disallowedCharacters = CharacterSet(charactersIn: ":")
+        if name.rangeOfCharacter(from: disallowedCharacters) != nil {
+            self.error = "Use only valid character for the file name"
+            return false
+        }
+        
+        let disallowedFileNames = ["Desktop", "Library", "Applications", "Downloads"]
+        if disallowedFileNames.contains(name) {
+            self.error = "Do not include directory name to the file name"
+            return false
+        }
+        
+        return true
     }
 }
