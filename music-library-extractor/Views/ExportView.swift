@@ -2,7 +2,7 @@
 //  SettingsView.swift
 //  music-library-extractor
 //
-//  Created by עזרא רוביו on 10/08/2023.
+//  Created by Ezra Rubio on 10/08/2023.
 //
 
 import SwiftUI

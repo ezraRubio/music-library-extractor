@@ -2,7 +2,7 @@
 //  MenuView.swift
 //  music-library-extractor
 //
-//  Created by עזרא רוביו on 13/08/2023.
+//  Created by Ezra Rubio on 13/08/2023.
 //
 
 import SwiftUI
