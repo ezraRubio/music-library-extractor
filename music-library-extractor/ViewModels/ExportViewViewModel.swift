@@ -30,6 +30,10 @@ class ExportViewViewModel: ObservableObject {
             return
         }
         
+        guard isNoFieldSelected() else {
+            return
+        }
+        
         guard isValidFileName(fileName) else {
             return
         }
@@ -170,6 +174,15 @@ class ExportViewViewModel: ObservableObject {
         let disallowedFileNames = ["Desktop", "Library", "Applications", "Downloads"]
         if disallowedFileNames.contains(name) {
             self.error = "Do not include directory name to the file name"
+            return false
+        }
+        
+        return true
+    }
+    
+    private func isNoFieldSelected() -> Bool {
+        if (!self.includeTitle && !self.includeArtist && !self.includeAlbum && !self.includeGenre && !self.includeTotalTime && !self.includeTrackNumber && !self.includeSampleRate && !self.includePurchased && !self.includeReleaseDate && !self.includeReleaseYear) {
+            self.error = "Please select at least on field of data to be included"
             return false
         }
         

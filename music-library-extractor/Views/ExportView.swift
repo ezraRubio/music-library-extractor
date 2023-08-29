@@ -39,11 +39,15 @@ struct ExportView: View {
             VStack {
                 Text("Name for the exported file: ")
                     .padding(.top, 50)
-                TextField("File Name", text: $viewModel.fileName)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .autocorrectionDisabled()
-                    .padding([.leading, .trailing], 200)
-                
+                HStack {
+                    TextField("File Name", text: $viewModel.fileName)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .autocorrectionDisabled()
+                    Text(".csv")
+                }
+                .padding([.leading, .trailing], 200)
+                .fixedSize()
+
                 if !viewModel.error.isEmpty {
                     Text(viewModel.error)
                         .foregroundColor(.red)
