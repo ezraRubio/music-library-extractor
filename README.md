@@ -11,5 +11,6 @@ The conversion of the data to CSV is done with the help of the [**CodableCSV** l
 
 ## Check Demo of usage
 
-https://github.com/ezraRubio/music-library-extractor/assets/81970147/c719c873-fc5d-48fe-8d0a-002fbbd1bb40
+![Untitled design](https://github.com/ezraRubio/music-library-extractor/assets/81970147/237cebcb-7fad-4157-a41d-596e3dd890fa)
+
 
