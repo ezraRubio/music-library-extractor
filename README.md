@@ -8,9 +8,5 @@ The conversion of the data to CSV is done with the help of the [**CodableCSV** l
 2. On the Export tab, select from the available fields of data what to include on the csv file (at least one field, _title_ selected by default), and add a name to it.
 3. Finally click on "**Export as .csv**". The created file will be waiting under "**/Downloads/Results**" 
 
-
-## Check Demo of usage
-
-![Untitled design](https://github.com/ezraRubio/music-library-extractor/assets/81970147/237cebcb-7fad-4157-a41d-596e3dd890fa)
-
+![Untitled design](https://github.com/ezraRubio/music-library-extractor/assets/81970147/6b01f8ce-f34f-4328-b475-ff564162cebb)
 
