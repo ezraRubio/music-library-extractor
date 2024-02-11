@@ -20,6 +20,8 @@ struct MenuNavigationView: View {
                     ResultsView(libraryViewModel: libraryViewModel)
                 case 2:
                     ExportView(libraryViewModel: libraryViewModel)
+                case 3:
+                    SpotifyView()
                 default:
                     MainView(libraryViewModel: libraryViewModel, currentMenuSelection: $currentMenuSelection)
             }

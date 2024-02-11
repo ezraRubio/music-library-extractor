@@ -7,11 +7,31 @@
 
 import SwiftUI
 
+class AppDelegate: NSObject, NSApplicationDelegate {
+    func application(_ application: NSApplication, open urls: [URL]) {
+        print("Received URLs: \(urls)")
+        // Process the URLs as needed
+        // Activate the existing instance
+        NSApp.activate(ignoringOtherApps: true)
+    }
+    
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
+        print("Application did finish launching")
+    }
+}
+
 @main
 struct music_library_extractorApp: App {
+    @ObservedObject var viewModel = SpotiftyViewModel()
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .onOpenURL(perform: { url in
+                    print("content view, received url: \(url)")
+                    viewModel.refreshToken(url)
+                })
         }
         .commands {
             CommandGroup(replacing: .appInfo) {
