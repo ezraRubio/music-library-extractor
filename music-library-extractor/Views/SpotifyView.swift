@@ -12,10 +12,10 @@ struct SpotifyView: View {
     
     var body: some View {
         Link("Authorize with Spotify", destination: viewModel.logInSpotify())
-//            .onOpenURL(perform: { url in
-//                print("view, received url: \(url)")
+            .onOpenURL(perform: { url in
+                print("view, received url: \(url)")
 //                viewModel.refreshToken(url)
-//            })
+            })
     }
 }
 
