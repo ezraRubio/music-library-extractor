@@ -8,8 +8,13 @@
 import Foundation
 import SpotifyWebAPI
 import Combine
+import KeychainAccess
 
 class SpotiftyViewModel: ObservableObject {
+    @Published var isAuthorized = false
+    @Published var currentUser: SpotifyUser? = nil
+    let keychain = Keychain(service: "com.ezra-rubio.music-library-extractor")
+    let authorizationManagerKey = "authorizationManager"
     
     private static let clientId: String = {
         if let clientId = ProcessInfo.processInfo
@@ -46,6 +51,90 @@ class SpotiftyViewModel: ObservableObject {
     )
     
     var cancellables: Set<AnyCancellable> = []
+    
+    init() {
+        self.spotify.apiRequestLogger.logLevel = .trace
+        
+        self.spotify.authorizationManagerDidChange
+            .receive(on: RunLoop.main)
+            .sink(receiveValue: authorizationManagerDidChange)
+            .store(in: &cancellables)
+        
+        self.spotify.authorizationManagerDidDeauthorize
+            .receive(on: RunLoop.main)
+            .sink(receiveValue: authorizationManagerDidDeauthorize)
+            .store(in: &cancellables)
+        
+        if let authManagerData = keychain[data: self.authorizationManagerKey] {
+            
+            do {
+                let authorizationManager = try JSONDecoder().decode(
+                    AuthorizationCodeFlowPKCEManager.self,
+                    from: authManagerData
+                )
+                print("found authorization information in keychain")
+  
+                self.spotify.authorizationManager = authorizationManager
+                
+            } catch {
+                print("could not decode authorizationManager from data:\n\(error)")
+            }
+        }
+        else {
+            print("did NOT find authorization information in keychain")
+        }
+    }
+    
+    func authorizationManagerDidChange() {
+        self.isAuthorized = self.spotify.authorizationManager.isAuthorized()
+        
+        print(
+            "Spotify.authorizationManagerDidChange: isAuthorized:",
+            self.isAuthorized
+        )
+        
+        self.retrieveCurrentUser()
+        
+        do {
+            // Encode the authorization information to data.
+            let authManagerData = try JSONEncoder().encode(
+                self.spotify.authorizationManager
+            )
+            
+            // Save the data to the keychain.
+            self.keychain[data: self.authorizationManagerKey] = authManagerData
+            print("did save authorization manager to keychain")
+            
+        } catch {
+            print(
+                "couldn't encode authorizationManager for storage " +
+                    "in keychain:\n\(error)"
+            )
+        }
+    }
+    
+    func authorizationManagerDidDeauthorize() {
+        self.isAuthorized = false
+        
+        self.currentUser = nil
+        
+        do {
+            try self.keychain.remove(self.authorizationManagerKey)
+            print("did remove authorization manager from keychain")
+        } catch {
+            print(
+                "couldn't remove authorization manager " +
+                "from keychain: \(error)"
+            )
+        }
+    }
+    
+    func retrieveCurrentUser() {
+        guard self.currentUser == nil else { return }
+        guard self.isAuthorized else { return }
+        
+        
+    }
     
     func logInSpotify() -> URL {
         let authorizationURL = spotify.authorizationManager.makeAuthorizationURL(
