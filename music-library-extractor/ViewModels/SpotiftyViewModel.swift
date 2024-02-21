@@ -133,7 +133,19 @@ class SpotiftyViewModel: ObservableObject {
         guard self.currentUser == nil else { return }
         guard self.isAuthorized else { return }
         
-        
+        self.spotify.currentUserProfile()
+            .receive(on: RunLoop.main)
+            .sink(
+                receiveCompletion: { completion in
+                    if case .failure(let error) = completion {
+                        print("couldn't retrieve current user: \(error)")
+                    }
+                },
+                receiveValue: { user in
+                    self.currentUser = user
+                }
+            )
+            .store(in: &cancellables)
     }
     
     func logInSpotify() -> URL {

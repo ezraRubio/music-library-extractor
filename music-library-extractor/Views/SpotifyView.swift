@@ -8,15 +8,20 @@
 import SwiftUI
 
 struct SpotifyView: View {
-    @ObservedObject var viewModel = SpotiftyViewModel()
+    @StateObject var viewModel = SpotiftyViewModel()
     
     var body: some View {
-        Link("Authorize with Spotify", destination: viewModel.logInSpotify())
-        .buttonStyle(.bordered)
-        .padding()
-        .onOpenURL(perform: { url in
-            viewModel.refreshToken(url)
-        })
+        if viewModel.isAuthorized {
+            Text("Welcome")
+            Text(viewModel.currentUser?.displayName ?? "")
+        } else {
+            Link("Authorize with Spotify", destination: viewModel.logInSpotify())
+            .buttonStyle(.bordered)
+            .padding()
+            .onOpenURL(perform: { url in
+                viewModel.refreshToken(url)
+            })
+        }
     }
 }
 
