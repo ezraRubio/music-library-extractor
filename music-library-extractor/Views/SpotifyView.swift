@@ -12,8 +12,11 @@ struct SpotifyView: View {
     
     var body: some View {
         if viewModel.isAuthorized {
-            Text("Welcome")
-            Text(viewModel.currentUser?.displayName ?? "")
+            HStack {
+                Text("Welcome \(viewModel.currentUser?.displayName ?? "")")
+                AsyncImage(url: viewModel.currentUser?.images?.first?.url)
+            }
+            .padding()
         } else {
             Link("Authorize with Spotify", destination: viewModel.logInSpotify())
             .buttonStyle(.bordered)
