@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct music_library_extractorApp: App {
+    @ObservedObject var viewModel = SpotiftyViewModel()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .handlesExternalEvents(preferring: ["music-library-extractor"], allowing: ["music-library-extractor"])
         }
         .commands {
             CommandGroup(replacing: .appInfo) {

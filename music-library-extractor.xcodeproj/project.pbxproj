@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		D0660BD92A8A3013000C1A61 /* ExportViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0660BD82A8A3013000C1A61 /* ExportViewViewModel.swift */; };
 		D0660BDB2A8A33ED000C1A61 /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0660BDA2A8A33ED000C1A61 /* Song.swift */; };
+		D067BFF62B850877006655D7 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = D067BFF52B850877006655D7 /* KeychainAccess */; };
+		D0B960C12B46E5B900E4B81E /* SpotifyAPI in Frameworks */ = {isa = PBXBuildFile; productRef = D0B960C02B46E5B900E4B81E /* SpotifyAPI */; };
+		D0C45C5E2B454E5E006CF409 /* SpotifyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C45C5D2B454E5E006CF409 /* SpotifyView.swift */; };
+		D0C45C602B4552C6006CF409 /* SpotiftyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C45C5F2B4552C6006CF409 /* SpotiftyViewModel.swift */; };
 		D0C621ED29C1114F0018B359 /* music_library_extractorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C621EC29C1114F0018B359 /* music_library_extractorApp.swift */; };
 		D0C621EF29C1114F0018B359 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C621EE29C1114F0018B359 /* ContentView.swift */; };
 		D0C621F129C111510018B359 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0C621F029C111510018B359 /* Assets.xcassets */; };
@@ -27,6 +31,9 @@
 /* Begin PBXFileReference section */
 		D0660BD82A8A3013000C1A61 /* ExportViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportViewViewModel.swift; sourceTree = "<group>"; };
 		D0660BDA2A8A33ED000C1A61 /* Song.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
+		D0B960C22B46ED1C00E4B81E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D0C45C5D2B454E5E006CF409 /* SpotifyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyView.swift; sourceTree = "<group>"; };
+		D0C45C5F2B4552C6006CF409 /* SpotiftyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotiftyViewModel.swift; sourceTree = "<group>"; };
 		D0C621E929C1114F0018B359 /* Music Library Extractor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Music Library Extractor.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0C621EC29C1114F0018B359 /* music_library_extractorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = music_library_extractorApp.swift; sourceTree = "<group>"; };
 		D0C621EE29C1114F0018B359 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -48,7 +55,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D067BFF62B850877006655D7 /* KeychainAccess in Frameworks */,
 				D0F855F72A8B8F10005F7D08 /* CodableCSV in Frameworks */,
+				D0B960C12B46E5B900E4B81E /* SpotifyAPI in Frameworks */,
 				D0C621FF29C122C70018B359 /* iTunesLibrary.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -76,6 +85,7 @@
 		D0C621EB29C1114F0018B359 /* music-library-extractor */ = {
 			isa = PBXGroup;
 			children = (
+				D0B960C22B46ED1C00E4B81E /* Info.plist */,
 				D0D6AB292A8501A600D4CD17 /* Models */,
 				D0D6AB282A85019E00D4CD17 /* Navigation */,
 				D0D6AB272A85018C00D4CD17 /* ViewModels */,
@@ -127,6 +137,7 @@
 				D0D6AB2B2A85050F00D4CD17 /* MainView.swift */,
 				D0D6AB2D2A85052500D4CD17 /* ResultsView.swift */,
 				D0D6AB2F2A85053200D4CD17 /* ExportView.swift */,
+				D0C45C5D2B454E5E006CF409 /* SpotifyView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -136,6 +147,7 @@
 			children = (
 				D0D6AB3D2A891B2900D4CD17 /* LibraryViewModel.swift */,
 				D0660BD82A8A3013000C1A61 /* ExportViewViewModel.swift */,
+				D0C45C5F2B4552C6006CF409 /* SpotiftyViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -176,6 +188,8 @@
 			name = "music-library-extractor";
 			packageProductDependencies = (
 				D0F855F62A8B8F10005F7D08 /* CodableCSV */,
+				D0B960C02B46E5B900E4B81E /* SpotifyAPI */,
+				D067BFF52B850877006655D7 /* KeychainAccess */,
 			);
 			productName = "music-library-extractor";
 			productReference = D0C621E929C1114F0018B359 /* Music Library Extractor.app */;
@@ -207,6 +221,8 @@
 			mainGroup = D0C621E029C1114F0018B359;
 			packageReferences = (
 				D0F855F52A8B8F0F005F7D08 /* XCRemoteSwiftPackageReference "CodableCSV" */,
+				D0B960BF2B46E5B900E4B81E /* XCRemoteSwiftPackageReference "SpotifyAPI" */,
+				D067BFF42B850877006655D7 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 			);
 			productRefGroup = D0C621EA29C1114F0018B359 /* Products */;
 			projectDirPath = "";
@@ -239,6 +255,8 @@
 				D0D6AB302A85053200D4CD17 /* ExportView.swift in Sources */,
 				D0D6AB382A88E39800D4CD17 /* MenuNavigationView.swift in Sources */,
 				D0C621EF29C1114F0018B359 /* ContentView.swift in Sources */,
+				D0C45C5E2B454E5E006CF409 /* SpotifyView.swift in Sources */,
+				D0C45C602B4552C6006CF409 /* SpotiftyViewModel.swift in Sources */,
 				D0660BDB2A8A33ED000C1A61 /* Song.swift in Sources */,
 				D0D6AB2E2A85052500D4CD17 /* ResultsView.swift in Sources */,
 				D0D6AB3A2A88E3AD00D4CD17 /* MenuView.swift in Sources */,
@@ -348,6 +366,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -383,6 +402,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "music-library-extractor/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Music Library Extractor";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -415,6 +435,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "music-library-extractor/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Music Library Extractor";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -454,6 +475,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		D067BFF42B850877006655D7 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		D0B960BF2B46E5B900E4B81E /* XCRemoteSwiftPackageReference "SpotifyAPI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Peter-Schorn/SpotifyAPI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.2.4;
+			};
+		};
 		D0F855F52A8B8F0F005F7D08 /* XCRemoteSwiftPackageReference "CodableCSV" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/dehesa/CodableCSV.git";
@@ -465,6 +502,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		D067BFF52B850877006655D7 /* KeychainAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D067BFF42B850877006655D7 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			productName = KeychainAccess;
+		};
+		D0B960C02B46E5B900E4B81E /* SpotifyAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D0B960BF2B46E5B900E4B81E /* XCRemoteSwiftPackageReference "SpotifyAPI" */;
+			productName = SpotifyAPI;
+		};
 		D0F855F62A8B8F10005F7D08 /* CodableCSV */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D0F855F52A8B8F0F005F7D08 /* XCRemoteSwiftPackageReference "CodableCSV" */;
