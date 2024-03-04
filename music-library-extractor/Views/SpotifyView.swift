@@ -9,14 +9,25 @@ import SwiftUI
 
 struct SpotifyView: View {
     @StateObject var viewModel = SpotiftyViewModel()
+    @StateObject var libraryViewModel = LibraryViewModel()
     
     var body: some View {
         if viewModel.isAuthorized {
-            HStack {
-                Text("Welcome \(viewModel.currentUser?.displayName ?? "")")
-                AsyncImage(url: viewModel.currentUser?.images?.first?.url)
+            VStack {
+                HStack {
+                    Text("Welcome \(viewModel.currentUser?.displayName ?? "")")
+                    AsyncImage(url: viewModel.currentUser?.images?.first?.url)
+                }
+                .padding()
+                Spacer()
+                
+                if !libraryViewModel.songs.isEmpty {
+                    Text("Search Spotify for your music now")
+                } else {
+                    Text("You need to extract your music library first from the main tab")
+                }
+                Spacer()
             }
-            .padding()
         } else {
             Link("Authorize with Spotify", destination: viewModel.logInSpotify())
             .buttonStyle(.bordered)
