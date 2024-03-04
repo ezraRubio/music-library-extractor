@@ -139,6 +139,8 @@ class SpotiftyViewModel: ObservableObject {
                 receiveCompletion: { completion in
                     if case .failure(let error) = completion {
                         print("couldn't retrieve current user: \(error)")
+                        self.isAuthorized = false
+                        self.currentUser = nil
                     }
                 },
                 receiveValue: { user in
@@ -189,4 +191,6 @@ class SpotiftyViewModel: ObservableObject {
         })
         .store(in: &cancellables)
     }
+    
+    
 }
