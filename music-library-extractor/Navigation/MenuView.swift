@@ -12,6 +12,7 @@ struct MenuView: View {
         .init(menuName:"Home", menuImage:"house"),
         .init(menuName:"Results", menuImage:"list.dash"),
         .init(menuName:"Export", menuImage:"square.and.arrow.up"),
+        .init(menuName: "Spotify", menuImage: "music.note"),
     ]
     @Binding var currentMenuSelection: Int
     
