@@ -191,6 +191,4 @@ class SpotiftyViewModel: ObservableObject {
         })
         .store(in: &cancellables)
     }
-    
-    
 }
