@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SpotifyView: View {
     @StateObject var viewModel = SpotiftyViewModel()
-    @StateObject var libraryViewModel = LibraryViewModel()
+    @ObservedObject var libraryViewModel = LibraryViewModel()
     
     var body: some View {
         if viewModel.isAuthorized {
@@ -21,10 +21,10 @@ struct SpotifyView: View {
                 .padding()
                 Spacer()
                 
-                if !libraryViewModel.songs.isEmpty {
+                if !libraryViewModel.mediaItems.isEmpty {
                     Text("Search Spotify for your music now")
                 } else {
-                    Text("You need to extract your music library first from the main tab")
+                    Text("You need to extract your music library first from the home tab")
                 }
                 Spacer()
             }
