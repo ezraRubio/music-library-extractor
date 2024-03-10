@@ -10,6 +10,7 @@ import SwiftUI
 struct MainView: View {
     @ObservedObject var libraryViewModel: LibraryViewModel
     @Binding var currentMenuSelection: Int
+    @State private var showEmptyLibraryAlert : Bool = false
     
     var body: some View {
         VStack {
@@ -26,11 +27,22 @@ struct MainView: View {
                 Spacer()
                 Button("Extract Library") {
                     libraryViewModel.generateSongList {
-                        self.currentMenuSelection = 1
+                        if !libraryViewModel.songs.isEmpty {
+                            self.currentMenuSelection = 1
+                        } else {
+                            showEmptyLibraryAlert = true
+                        }
                     }
                 }
             }
             Spacer()
+        }
+        .alert(isPresented: $showEmptyLibraryAlert) {
+            Alert(  
+                title: Text("Empty music library"),
+                message: Text("An empty music library cannot be extracted"),
+                dismissButton: .default(Text("OK"))
+            )
         }
     }
 }
