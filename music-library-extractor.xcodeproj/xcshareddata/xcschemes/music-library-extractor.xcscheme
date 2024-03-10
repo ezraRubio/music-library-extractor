@@ -59,18 +59,6 @@
             ReferencedContainer = "container:music-library-extractor.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "CLIENT_ID"
-            value = "a03d9f9e26b1409e9736689b9b114857"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-         <EnvironmentVariable
-            key = "CLIENT_SECRET"
-            value = "ed1144320946402b9fcde61bbd97b986"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
