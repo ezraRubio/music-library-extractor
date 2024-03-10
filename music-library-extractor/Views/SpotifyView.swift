@@ -22,7 +22,9 @@ struct SpotifyView: View {
                 Spacer()
                 
                 if !libraryViewModel.mediaItems.isEmpty {
-                    Text("Search Spotify for your music now")
+                    Button("Search Spotify for your music now") {
+                        viewModel.processExtractedLibraryItems(mediaItems: libraryViewModel.mediaItems)
+                    }
                 } else {
                     Text("You need to extract your music library first from the home tab")
                 }

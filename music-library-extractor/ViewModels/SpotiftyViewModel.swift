@@ -190,5 +190,15 @@ class SpotiftyViewModel: ObservableObject {
         .store(in: &cancellables)
     }
     
+    func processExtractedLibraryItems(mediaItems: [Song]) {
+        for item: Song in mediaItems {
+            let title = item.title
+            let artist = item.artist
+            let album = item.album
+            
+            print("title: \(title), artist: \(artist), album: \(album)")
+            //call here logic related to spotify api
+        }
+    }
     
 }
