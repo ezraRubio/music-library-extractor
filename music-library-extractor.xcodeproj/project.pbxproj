@@ -31,6 +31,7 @@
 /* Begin PBXFileReference section */
 		D0660BD82A8A3013000C1A61 /* ExportViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportViewViewModel.swift; sourceTree = "<group>"; };
 		D0660BDA2A8A33ED000C1A61 /* Song.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
+		D08A7CB82B9DB63A00DEDA3F /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		D0B960C22B46ED1C00E4B81E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		D0C45C5D2B454E5E006CF409 /* SpotifyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyView.swift; sourceTree = "<group>"; };
 		D0C45C5F2B4552C6006CF409 /* SpotiftyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotiftyViewModel.swift; sourceTree = "<group>"; };
@@ -93,6 +94,7 @@
 				D0C621FC29C118B80018B359 /* resources */,
 				D0C621FB29C118AE0018B359 /* sources */,
 				D0C621F229C111510018B359 /* Preview Content */,
+				D08A7CB82B9DB63A00DEDA3F /* Secrets.xcconfig */,
 			);
 			path = "music-library-extractor";
 			sourceTree = "<group>";
@@ -271,6 +273,7 @@
 /* Begin XCBuildConfiguration section */
 		D0C621F629C111510018B359 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D08A7CB82B9DB63A00DEDA3F /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -332,6 +335,7 @@
 		};
 		D0C621F729C111510018B359 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D08A7CB82B9DB63A00DEDA3F /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
