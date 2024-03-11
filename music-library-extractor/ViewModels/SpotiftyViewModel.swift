@@ -157,7 +157,9 @@ class SpotiftyViewModel: ObservableObject {
                 .playlistModifyPrivate,
                 .userModifyPlaybackState,
                 .playlistReadCollaborative,
-                .userReadPlaybackPosition
+                .userReadPlaybackPosition,
+                .userLibraryRead,
+                .userLibraryModify,
             ]
         )!
         print("sent to authorize: \(authorizationURL)")
@@ -198,7 +200,54 @@ class SpotiftyViewModel: ObservableObject {
             
             print("title: \(title), artist: \(artist), album: \(album)")
             //call here logic related to spotify api
+            findMediaItemInSpotify(mediaItem: item)
         }
+    }
+    
+    func findMediaItemInSpotify(mediaItem: Song) {
+        let searchPublisher = spotify.search(query: "\(mediaItem.title) \(mediaItem.album)", categories: [IDCategory.track, IDCategory.album])
+        
+        print("publisher created: \(searchPublisher)")
+        searchPublisher
+            .receive(on: RunLoop.main)
+            .sink(receiveCompletion: { completion in
+                 switch completion {
+                 case .finished:
+                     // The search completed successfully
+                     print("search completed successfully")
+                     break
+                 case .failure(let error):
+                     // Handle the error
+                     print("Error: \(error)")
+                 }
+             },
+             receiveValue: { searchResult in
+                 // Handle the search result
+                let results = searchResult.tracks?.items.map { $0.uri ?? "" } ?? []
+                let isItemInUserSpotifyLibrary = self.checkMediaItemInUserSpotifyLibrary(uris: results)
+                 // Now you can access properties of the SearchResult, such as searchResult.tracks, searchResult.albums, etc.
+             })
+            .store(in: &cancellables)
+    }
+
+    func checkMediaItemInUserSpotifyLibrary(uris: [String]) -> Bool {
+        var itemInLibrary: Bool  = false
+        for uri: String in uris {
+            spotify.currentUserSavedTracksContains([uri])
+                .receive(on: RunLoop.main)
+                .sink(receiveCompletion: { completion in
+                    switch completion {
+                    case .finished:
+                        break
+                    case .failure(let error):
+                        print("error searching for \(uri) in users library: \(error)")
+                    }
+                }, receiveValue: { isFound in
+                    itemInLibrary = isFound.first ?? false
+                })
+                .store(in: &cancellables)
+        }
+        return itemInLibrary
     }
     
 }
