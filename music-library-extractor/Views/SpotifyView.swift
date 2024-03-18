@@ -23,7 +23,9 @@ struct SpotifyView: View {
                 
                 if !libraryViewModel.mediaItems.isEmpty {
                     Button("Search Spotify for your music now") {
-                        viewModel.processExtractedLibraryItems(mediaItems: libraryViewModel.mediaItems)
+                        Task {
+                            await viewModel.processExtractedLibraryItems(mediaItems: libraryViewModel.mediaItems)
+                        }
                     }
                 } else {
                     Text("You need to extract your music library first from the home tab")

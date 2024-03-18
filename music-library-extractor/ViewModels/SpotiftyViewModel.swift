@@ -192,60 +192,45 @@ class SpotiftyViewModel: ObservableObject {
         .store(in: &cancellables)
     }
     
-    func processExtractedLibraryItems(mediaItems: [Song]) {
+    func processExtractedLibraryItems(mediaItems: [Song]) async {
         for item: Song in mediaItems {
             let title = item.title
             let artist = item.artist
             let album = item.album
             
             print("title: \(title), artist: \(artist), album: \(album)")
-            //call here logic related to spotify api
-            findMediaItemInSpotify(mediaItem: item)
+
+            let results = await findMediaItemInSpotify(mediaItem: item)
+            let isItemInUserSpotifyLibrary = await checkMediaItemInUserSpotifyLibrary(uris: results)
+            print("is item in lib? \(isItemInUserSpotifyLibrary)")
         }
     }
     
-    func findMediaItemInSpotify(mediaItem: Song) {
-        let searchPublisher = spotify.search(query: "\(mediaItem.title) \(mediaItem.album)", categories: [IDCategory.track, IDCategory.album])
+    func findMediaItemInSpotify(mediaItem: Song) async -> [String] {
+        let searchPublisherValues = spotify.search(query: "\(mediaItem.title) \(mediaItem.album)", categories: [IDCategory.track, IDCategory.album]).values
+        var results: [String] = []
         
-        print("publisher created: \(searchPublisher)")
-        searchPublisher
-            .receive(on: RunLoop.main)
-            .sink(receiveCompletion: { completion in
-                 switch completion {
-                 case .finished:
-                     // The search completed successfully
-                     print("search completed successfully")
-                     break
-                 case .failure(let error):
-                     // Handle the error
-                     print("Error: \(error)")
-                 }
-             },
-             receiveValue: { searchResult in
-                 // Handle the search result
-                let results = searchResult.tracks?.items.map { $0.uri ?? "" } ?? []
-                let isItemInUserSpotifyLibrary = self.checkMediaItemInUserSpotifyLibrary(uris: results)
-                 // Now you can access properties of the SearchResult, such as searchResult.tracks, searchResult.albums, etc.
-             })
-            .store(in: &cancellables)
+        do {
+            for try await searchValue in searchPublisherValues {
+                searchValue.tracks?.items.forEach { results.append($0.uri ?? "") }
+            }
+        } catch {
+            print("Error while searching on spotify: \(error)")
+        }
+        
+        return results
     }
 
-    func checkMediaItemInUserSpotifyLibrary(uris: [String]) -> Bool {
+    func checkMediaItemInUserSpotifyLibrary(uris: [String]) async -> Bool {
         var itemInLibrary: Bool  = false
         for uri: String in uris {
-            spotify.currentUserSavedTracksContains([uri])
-                .receive(on: RunLoop.main)
-                .sink(receiveCompletion: { completion in
-                    switch completion {
-                    case .finished:
-                        break
-                    case .failure(let error):
-                        print("error searching for \(uri) in users library: \(error)")
-                    }
-                }, receiveValue: { isFound in
-                    itemInLibrary = isFound.first ?? false
-                })
-                .store(in: &cancellables)
+            do {
+                for try await item in spotify.currentUserSavedTracksContains([uri]).values {
+                    itemInLibrary = item.first ?? false
+                }
+            } catch {
+                print("error while checking inside user's library: \(error)")
+            }
         }
         return itemInLibrary
     }
