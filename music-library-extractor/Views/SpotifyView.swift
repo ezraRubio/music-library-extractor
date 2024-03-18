@@ -21,6 +21,10 @@ struct SpotifyView: View {
                 .padding()
                 Spacer()
                 
+                if !viewModel.itemsToUserSpotify.isEmpty {
+                    ToSpotifyView(toSpotifyItems: viewModel.itemsToUserSpotify)
+                }
+                
                 if !libraryViewModel.mediaItems.isEmpty {
                     Button("Search Spotify for your music now") {
                         Task {
