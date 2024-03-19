@@ -13,6 +13,9 @@ import KeychainAccess
 class SpotiftyViewModel: ObservableObject {
     @Published var isAuthorized = false
     @Published var currentUser: SpotifyUser? = nil
+    @Published var itemsToUserSpotify: [SpotifyLibItem] = []
+    @Published var isDoneProcessingItems: Bool = true
+    
     let keychain = Keychain(service: "com.ezra-rubio.music-library-extractor")
     let authorizationManagerKey = "authorizationManager"
     
@@ -157,7 +160,9 @@ class SpotiftyViewModel: ObservableObject {
                 .playlistModifyPrivate,
                 .userModifyPlaybackState,
                 .playlistReadCollaborative,
-                .userReadPlaybackPosition
+                .userReadPlaybackPosition,
+                .userLibraryRead,
+                .userLibraryModify,
             ]
         )!
         print("sent to authorize: \(authorizationURL)")
@@ -188,5 +193,46 @@ class SpotiftyViewModel: ObservableObject {
             }
         })
         .store(in: &cancellables)
+    }
+    
+    func processExtractedLibraryItems(mediaItems: [Song]) async {
+        for item: Song in mediaItems {
+            isDoneProcessingItems = false
+            let results = await findMediaItemInSpotify(mediaItem: item)
+            let isItemInUserSpotifyLibrary = await checkMediaItemInUserSpotifyLibrary(uris: results)
+            
+            let spotifyItem = SpotifyLibItem(title: item.title, artist: item.artist, album: item.album, onUserLibrary: isItemInUserSpotifyLibrary, notFoundOnSpotify: results.isEmpty, spotifyUri: results.first ?? "")
+            itemsToUserSpotify.append(spotifyItem)
+        }
+        isDoneProcessingItems = true
+    }
+    
+    func findMediaItemInSpotify(mediaItem: Song) async -> [String] {
+        let searchPublisherValues = spotify.search(query: "\(mediaItem.title) \(mediaItem.album)", categories: [IDCategory.track, IDCategory.album]).values
+        var results: [String] = []
+        
+        do {
+            for try await searchValue in searchPublisherValues {
+                searchValue.tracks?.items.forEach { results.append($0.uri ?? "") }
+            }
+        } catch {
+            print("Error while searching on spotify: \(error)")
+        }
+        
+        return results
+    }
+
+    func checkMediaItemInUserSpotifyLibrary(uris: [String]) async -> Bool {
+        var itemInLibrary: Bool  = false
+        for uri: String in uris {
+            do {
+                for try await item in spotify.currentUserSavedTracksContains([uri]).values {
+                    itemInLibrary = item.first ?? false
+                }
+            } catch {
+                print("error while checking inside user's library: \(error)")
+            }
+        }
+        return itemInLibrary
     }
 }

@@ -21,8 +21,22 @@ struct SpotifyView: View {
                 .padding()
                 Spacer()
                 
-                if !libraryViewModel.mediaItems.isEmpty {
-                    Text("Search Spotify for your music now")
+                if !viewModel.itemsToUserSpotify.isEmpty {
+                    ToSpotifyView(toSpotifyItems: viewModel.itemsToUserSpotify)
+                }
+                
+                if !libraryViewModel.mediaItems.isEmpty && viewModel.itemsToUserSpotify.isEmpty {
+                    Button("Search Spotify for your music now") {
+                        Task {
+                            await viewModel.processExtractedLibraryItems(mediaItems: libraryViewModel.mediaItems)
+                        }
+                    }
+                    .disabled(!viewModel.isDoneProcessingItems)
+                } else if !libraryViewModel.mediaItems.isEmpty && !viewModel.itemsToUserSpotify.isEmpty {
+                    Button("Add selection to your Spotify Library") {
+                        
+                    }
+                    .disabled(!viewModel.isDoneProcessingItems)
                 } else {
                     Text("You need to extract your music library first from the home tab")
                 }
