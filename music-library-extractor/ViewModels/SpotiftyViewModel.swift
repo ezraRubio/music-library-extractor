@@ -235,5 +235,4 @@ class SpotiftyViewModel: ObservableObject {
         }
         return itemInLibrary
     }
-    
 }
