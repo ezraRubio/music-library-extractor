@@ -14,6 +14,8 @@ class SpotiftyViewModel: ObservableObject {
     @Published var isAuthorized = false
     @Published var currentUser: SpotifyUser? = nil
     @Published var itemsToUserSpotify: [SpotifyLibItem] = []
+    @Published var isDoneProcessingItems: Bool = true
+    
     let keychain = Keychain(service: "com.ezra-rubio.music-library-extractor")
     let authorizationManagerKey = "authorizationManager"
     
@@ -195,14 +197,14 @@ class SpotiftyViewModel: ObservableObject {
     
     func processExtractedLibraryItems(mediaItems: [Song]) async {
         for item: Song in mediaItems {
+            isDoneProcessingItems = false
             let results = await findMediaItemInSpotify(mediaItem: item)
             let isItemInUserSpotifyLibrary = await checkMediaItemInUserSpotifyLibrary(uris: results)
             
             let spotifyItem = SpotifyLibItem(title: item.title, artist: item.artist, album: item.album, onUserLibrary: isItemInUserSpotifyLibrary, notFoundOnSpotify: results.isEmpty, spotifyUri: results.first ?? "")
             itemsToUserSpotify.append(spotifyItem)
         }
-        
-        print("set of items to user spotify: \(itemsToUserSpotify)")
+        isDoneProcessingItems = true
     }
     
     func findMediaItemInSpotify(mediaItem: Song) async -> [String] {
