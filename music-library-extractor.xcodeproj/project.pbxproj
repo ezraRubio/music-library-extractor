@@ -27,6 +27,7 @@
 		D0D6AB3A2A88E3AD00D4CD17 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D6AB392A88E3AD00D4CD17 /* MenuView.swift */; };
 		D0D6AB3C2A88EBAB00D4CD17 /* MenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D6AB3B2A88EBAB00D4CD17 /* MenuItem.swift */; };
 		D0D6AB3E2A891B2900D4CD17 /* LibraryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D6AB3D2A891B2900D4CD17 /* LibraryViewModel.swift */; };
+		D0E14FCE2BB58E7B00D27B36 /* ToSpotifyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E14FCD2BB58E7B00D27B36 /* ToSpotifyViewModel.swift */; };
 		D0F855F72A8B8F10005F7D08 /* CodableCSV in Frameworks */ = {isa = PBXBuildFile; productRef = D0F855F62A8B8F10005F7D08 /* CodableCSV */; };
 /* End PBXBuildFile section */
 
@@ -53,6 +54,7 @@
 		D0D6AB392A88E3AD00D4CD17 /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		D0D6AB3B2A88EBAB00D4CD17 /* MenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItem.swift; sourceTree = "<group>"; };
 		D0D6AB3D2A891B2900D4CD17 /* LibraryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewModel.swift; sourceTree = "<group>"; };
+		D0E14FCD2BB58E7B00D27B36 /* ToSpotifyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToSpotifyViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +157,7 @@
 				D0D6AB3D2A891B2900D4CD17 /* LibraryViewModel.swift */,
 				D0660BD82A8A3013000C1A61 /* ExportViewViewModel.swift */,
 				D0C45C5F2B4552C6006CF409 /* SpotiftyViewModel.swift */,
+				D0E14FCD2BB58E7B00D27B36 /* ToSpotifyViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -258,6 +261,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0E14FCE2BB58E7B00D27B36 /* ToSpotifyViewModel.swift in Sources */,
 				D0D6AB3C2A88EBAB00D4CD17 /* MenuItem.swift in Sources */,
 				D0660BD92A8A3013000C1A61 /* ExportViewViewModel.swift in Sources */,
 				D0D6AB302A85053200D4CD17 /* ExportView.swift in Sources */,

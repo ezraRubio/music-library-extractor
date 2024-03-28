@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct SpotifyLibItem: Identifiable {
+struct SpotifyLibItem: Identifiable, Equatable {
     var title: String
     var artist: String
     var album: String
