@@ -22,7 +22,7 @@ struct SpotifyView: View {
                 Spacer()
                 
                 if !viewModel.itemsToUserSpotify.isEmpty {
-                    ToSpotifyView(toSpotifyItems: viewModel.itemsToUserSpotify)
+                    ToSpotifyView(spotifyViewModel: viewModel)
                 }
                 
                 if !libraryViewModel.mediaItems.isEmpty && viewModel.itemsToUserSpotify.isEmpty {
@@ -34,7 +34,7 @@ struct SpotifyView: View {
                     .disabled(!viewModel.isDoneProcessingItems)
                 } else if !libraryViewModel.mediaItems.isEmpty && !viewModel.itemsToUserSpotify.isEmpty {
                     Button("Add selection to your Spotify Library") {
-                        
+                        viewModel.processSelectedItemsIntoSpotifyLibrary()
                     }
                     .disabled(!viewModel.isDoneProcessingItems)
                 } else {

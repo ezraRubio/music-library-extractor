@@ -15,6 +15,7 @@ class SpotiftyViewModel: ObservableObject {
     @Published var currentUser: SpotifyUser? = nil
     @Published var itemsToUserSpotify: [SpotifyLibItem] = []
     @Published var isDoneProcessingItems: Bool = true
+    var listUriToAdd: [String] = []
     
     let keychain = Keychain(service: "com.ezra-rubio.music-library-extractor")
     let authorizationManagerKey = "authorizationManager"
@@ -201,7 +202,7 @@ class SpotiftyViewModel: ObservableObject {
             let results = await findMediaItemInSpotify(mediaItem: item)
             let isItemInUserSpotifyLibrary = await checkMediaItemInUserSpotifyLibrary(uris: results)
             
-            let spotifyItem = SpotifyLibItem(title: item.title, artist: item.artist, album: item.album, onUserLibrary: isItemInUserSpotifyLibrary, notFoundOnSpotify: results.isEmpty, spotifyUri: results.first ?? "")
+            let spotifyItem = SpotifyLibItem(title: item.title, artist: item.artist, album: item.album, onUserLibrary: isItemInUserSpotifyLibrary, notFoundOnSpotify: results.isEmpty, spotifyUri: results.first ?? "", isSelected: false)
             itemsToUserSpotify.append(spotifyItem)
         }
         isDoneProcessingItems = true
@@ -234,5 +235,14 @@ class SpotiftyViewModel: ObservableObject {
             }
         }
         return itemInLibrary
+    }
+    
+    func processSelectedItemsIntoSpotifyLibrary() {
+        for item: SpotifyLibItem in itemsToUserSpotify {
+            if item.isSelected {
+                listUriToAdd.append(item.spotifyUri)
+            }
+        }
+        print("list items: ", listUriToAdd)
     }
 }
