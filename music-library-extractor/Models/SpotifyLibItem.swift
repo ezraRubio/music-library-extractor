@@ -14,6 +14,7 @@ struct SpotifyLibItem: Identifiable, Equatable {
     var onUserLibrary: Bool
     var notFoundOnSpotify: Bool
     var spotifyUri: String
+    var isSelected: Bool
     
     var formattedNotFoundOnSpotify: String {
         notFoundOnSpotify ? "Not Found On Spotify" : "Found on Spotify"
