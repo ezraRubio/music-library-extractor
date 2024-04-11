@@ -32,11 +32,13 @@ struct SpotifyView: View {
                         }
                     }
                     .disabled(!viewModel.isDoneProcessingItems)
-                } else if !libraryViewModel.mediaItems.isEmpty && !viewModel.itemsToUserSpotify.isEmpty {
+                } else if !libraryViewModel.mediaItems.isEmpty && !viewModel.itemsToUserSpotify.isEmpty && !viewModel.isDoneAddingItemsToSpotify {
                     Button("Add selection to your Spotify Library") {
                         viewModel.processSelectedItemsIntoSpotifyLibrary()
                     }
                     .disabled(!viewModel.isDoneProcessingItems)
+                } else if viewModel.isDoneAddingItemsToSpotify {
+                    Text("Done adding selected songs to spotify")
                 } else {
                     Text("You need to extract your music library first from the home tab")
                 }
