@@ -10,11 +10,13 @@ import SpotifyWebAPI
 import Combine
 import KeychainAccess
 
+@MainActor
 class SpotiftyViewModel: ObservableObject {
     @Published var isAuthorized = false
     @Published var currentUser: SpotifyUser? = nil
     @Published var itemsToUserSpotify: [SpotifyLibItem] = []
     @Published var isDoneProcessingItems: Bool = true
+    @Published var isDoneAddingItemsToSpotify: Bool = false
     var listUriToAdd: [String] = []
     
     let keychain = Keychain(service: "com.ezra-rubio.music-library-extractor")
@@ -200,16 +202,17 @@ class SpotiftyViewModel: ObservableObject {
         for item: Song in mediaItems {
             isDoneProcessingItems = false
             let results = await findMediaItemInSpotify(mediaItem: item)
-            let isItemInUserSpotifyLibrary = await checkMediaItemInUserSpotifyLibrary(uris: results)
-            
-            let spotifyItem = SpotifyLibItem(title: item.title, artist: item.artist, album: item.album, onUserLibrary: isItemInUserSpotifyLibrary, notFoundOnSpotify: results.isEmpty, spotifyUri: results.first ?? "", isSelected: false)
+            let filteredUri = await filterSpotifySearchResults(uris: results, item: item)
+            let isItemInUserSpotifyLibrary = await checkMediaItemInUserSpotifyLibrary(uri: filteredUri)
+
+            let spotifyItem = SpotifyLibItem(title: item.title, artist: item.artist, album: item.album, onUserLibrary: isItemInUserSpotifyLibrary, notFoundOnSpotify: filteredUri.isEmpty, spotifyUri: filteredUri , isSelected: false)
             itemsToUserSpotify.append(spotifyItem)
         }
         isDoneProcessingItems = true
     }
     
     func findMediaItemInSpotify(mediaItem: Song) async -> [String] {
-        let searchPublisherValues = spotify.search(query: "\(mediaItem.title) \(mediaItem.album)", categories: [IDCategory.track, IDCategory.album]).values
+        let searchPublisherValues = spotify.search(query: "\(mediaItem.title) \(mediaItem.artist) \(mediaItem.album)", categories: [IDCategory.track, IDCategory.artist, IDCategory.album]).values
         var results: [String] = []
         
         do {
@@ -222,17 +225,33 @@ class SpotiftyViewModel: ObservableObject {
         
         return results
     }
-
-    func checkMediaItemInUserSpotifyLibrary(uris: [String]) async -> Bool {
-        var itemInLibrary: Bool  = false
-        for uri: String in uris {
+    
+    func filterSpotifySearchResults(uris: [String], item: Song) async -> String {
+        var filteredUri: String = ""
+        for uri in uris {
+            let tracksPublisherValues = spotify.track(uri).values
             do {
-                for try await item in spotify.currentUserSavedTracksContains([uri]).values {
-                    itemInLibrary = item.first ?? false
+                for try await foundItem in tracksPublisherValues {
+                    if foundItem.name.lowercased() == item.title.lowercased() && foundItem.album?.name.lowercased() == item.album.lowercased() && foundItem.artists?.first?.name.lowercased() == item.artist.lowercased() {
+                        filteredUri = uri
+                        return filteredUri
+                    }
                 }
             } catch {
-                print("error while checking inside user's library: \(error)")
+                print("error while checking items found on spotify library: ", error)
             }
+        }
+        return filteredUri
+    }
+
+    func checkMediaItemInUserSpotifyLibrary(uri: String) async -> Bool {
+        var itemInLibrary: Bool  = false
+        do {
+            for try await item in spotify.currentUserSavedTracksContains([uri]).values {
+                itemInLibrary = item.first!
+            }
+        } catch {
+            print("error while checking inside user's library: \(error)")
         }
         return itemInLibrary
     }
@@ -243,6 +262,15 @@ class SpotiftyViewModel: ObservableObject {
                 listUriToAdd.append(item.spotifyUri)
             }
         }
-        print("list items: ", listUriToAdd)
+        spotify.saveTracksForCurrentUser(listUriToAdd)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                    case .finished:
+                        self.isDoneAddingItemsToSpotify = true
+                    case .failure(let error):
+                        print("Error while adding to library: ", error)
+                }
+            })
+            .store(in: &cancellables)
     }
 }
