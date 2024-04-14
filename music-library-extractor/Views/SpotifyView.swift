@@ -21,25 +21,22 @@ struct SpotifyView: View {
                 .padding()
                 Spacer()
                 
-                if !viewModel.itemsToUserSpotify.isEmpty {
+                if viewModel.isDoneAddingItemsToSpotify {
+                    Text("Done adding selected songs to spotify")
+                } else if !viewModel.itemsToUserSpotify.isEmpty {
                     ToSpotifyView(spotifyViewModel: viewModel)
-                }
-                
-                if !libraryViewModel.mediaItems.isEmpty && viewModel.itemsToUserSpotify.isEmpty {
+                    Button("Add selection to your Spotify Library") {
+                        viewModel.processSelectedItemsIntoSpotifyLibrary()
+                    }
+                    .disabled(!viewModel.isDoneProcessingItems)
+                } else if !libraryViewModel.mediaItems.isEmpty {
                     Button("Search Spotify for your music now") {
                         Task {
                             await viewModel.processExtractedLibraryItems(mediaItems: libraryViewModel.mediaItems)
                         }
                     }
                     .disabled(!viewModel.isDoneProcessingItems)
-                } else if !libraryViewModel.mediaItems.isEmpty && !viewModel.itemsToUserSpotify.isEmpty && !viewModel.isDoneAddingItemsToSpotify {
-                    Button("Add selection to your Spotify Library") {
-                        viewModel.processSelectedItemsIntoSpotifyLibrary()
-                    }
-                    .disabled(!viewModel.isDoneProcessingItems)
-                } else if viewModel.isDoneAddingItemsToSpotify {
-                    Text("Done adding selected songs to spotify")
-                } else {
+                }  else {
                     Text("You need to extract your music library first from the home tab")
                 }
                 Spacer()

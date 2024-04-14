@@ -92,11 +92,6 @@ class SpotiftyViewModel: ObservableObject {
     func authorizationManagerDidChange() {
         self.isAuthorized = self.spotify.authorizationManager.isAuthorized()
         
-        print(
-            "Spotify.authorizationManagerDidChange: isAuthorized:",
-            self.isAuthorized
-        )
-        
         self.retrieveCurrentUser()
         
         do {
@@ -107,7 +102,6 @@ class SpotiftyViewModel: ObservableObject {
             
             // Save the data to the keychain.
             self.keychain[data: self.authorizationManagerKey] = authManagerData
-            print("did save authorization manager to keychain")
             
         } catch {
             print(
@@ -124,7 +118,6 @@ class SpotiftyViewModel: ObservableObject {
         
         do {
             try self.keychain.remove(self.authorizationManagerKey)
-            print("did remove authorization manager from keychain")
         } catch {
             print(
                 "couldn't remove authorization manager " +
@@ -168,18 +161,13 @@ class SpotiftyViewModel: ObservableObject {
                 .userLibraryModify,
             ]
         )!
-        print("sent to authorize: \(authorizationURL)")
         return authorizationURL
     }
     
     func refreshToken(_ url: URL) {
-        print("inside refresh token, received url: \(url)")
         spotify.authorizationManager.requestAccessAndRefreshTokens(
             redirectURIWithQuery: url,
-            // Must match the code verifier that was used to generate the
-            // code challenge when creating the authorization URL.
             codeVerifier: SpotiftyViewModel.codeVerifier,
-            // Must match the value used when creating the authorization URL.
             state: state
         )
         .sink(receiveCompletion: { completion in

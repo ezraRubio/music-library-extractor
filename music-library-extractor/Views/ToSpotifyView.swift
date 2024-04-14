@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ToSpotifyView: View {
     @ObservedObject var spotifyViewModel = SpotiftyViewModel()
-//    @State var tableContents: [SpotifyLibItem]
     
     var body: some View {
         Table(spotifyViewModel.itemsToUserSpotify) {
