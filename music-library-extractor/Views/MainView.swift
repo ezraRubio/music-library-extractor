@@ -11,6 +11,8 @@ struct MainView: View {
     @ObservedObject var libraryViewModel: LibraryViewModel
     @Binding var currentMenuSelection: Int
     @State private var showEmptyLibraryAlert : Bool = false
+    @State private var isExtractFromLibraryDisabled: Bool = false
+    @State private var isPresentFileImporter: Bool = false
     
     var body: some View {
         VStack {
@@ -18,23 +20,43 @@ struct MainView: View {
                 .padding()
                 .bold()
 
-            if !libraryViewModel.songs.isEmpty {
-                Spacer()
-                Text("check the results tab")
-            } else {
-                Text("Click in the button below to start")
-                    .padding()
-                Spacer()
-                Button("Extract Library") {
-                    libraryViewModel.generateSongList {
-                        if !libraryViewModel.songs.isEmpty {
-                            self.currentMenuSelection = 1
-                        } else {
-                            showEmptyLibraryAlert = true
-                        }
+
+            Text("Click in the button below to start")
+                .padding()
+            Spacer()
+            Button("Extract Library from Apple Music") {
+                libraryViewModel.generateSongListFromItunes {
+                    if !libraryViewModel.songs.isEmpty {
+                        self.currentMenuSelection = 1
+                    } else {
+                        showEmptyLibraryAlert = true
                     }
                 }
             }
+                .padding()
+                .disabled(isExtractFromLibraryDisabled)
+            Button("Import CSV file") {
+                self.isExtractFromLibraryDisabled = true
+                self.isPresentFileImporter = true
+            }
+                .fileImporter(isPresented: $isExtractFromLibraryDisabled, allowedContentTypes: [.fileURL, .text]) {result in
+                    switch result {
+                    case .success(let file):
+                        let gotAccess = file.startAccessingSecurityScopedResource()
+                        if !gotAccess { return }
+                        libraryViewModel.generateSongListFromCSV(file) {
+                            file.stopAccessingSecurityScopedResource()
+                            if !libraryViewModel.mediaItems.isEmpty {
+                                self.currentMenuSelection = 1
+                            } else {
+                                print("error on completion")
+                            }
+                        }
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+
             Spacer()
         }
         .alert(isPresented: $showEmptyLibraryAlert) {

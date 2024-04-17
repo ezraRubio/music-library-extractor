@@ -76,7 +76,6 @@ class SpotiftyViewModel: ObservableObject {
                     AuthorizationCodeFlowPKCEManager.self,
                     from: authManagerData
                 )
-                print("found authorization information in keychain")
   
                 self.spotify.authorizationManager = authorizationManager
                 
@@ -254,7 +253,10 @@ class SpotiftyViewModel: ObservableObject {
             .sink(receiveCompletion: { completion in
                 switch completion {
                     case .finished:
-                        self.isDoneAddingItemsToSpotify = true
+                        DispatchQueue.main.async{
+                            self.isDoneAddingItemsToSpotify = true
+                        }
+                        
                     case .failure(let error):
                         print("Error while adding to library: ", error)
                 }

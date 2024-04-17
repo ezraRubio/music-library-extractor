@@ -16,6 +16,9 @@ struct ExportView: View {
             VStack {
                 Text("Select what data you want to include on your export: ")
                     .padding(.top, 30)
+                Text("For better results on Spotify, include at least title, artist and album")
+                    .fontWidth(.condensed)
+                    .fontWeight(.thin)
                 
                 HStack {
                     Toggle("Title", isOn: $viewModel.includeTitle)

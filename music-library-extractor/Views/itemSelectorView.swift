@@ -16,7 +16,3 @@ struct itemSelectorView: View {
         .disabled(item.notFoundOnSpotify || item.onUserLibrary)
     }
 }
-
-//#Preview {
-//    itemSelectorView(item: , index: 0, isSelected: false)
-//}
