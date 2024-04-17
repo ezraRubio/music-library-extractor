@@ -12,7 +12,7 @@ struct ResultsView: View {
     @State private var sortOrder = [KeyPathComparator(\Song.title), KeyPathComparator(\Song.artist), KeyPathComparator(\Song.album), KeyPathComparator(\Song.genre)]
 
     var body: some View {
-        if !libraryViewModel.songs.isEmpty {
+        if !libraryViewModel.mediaItems.isEmpty {
             Table(libraryViewModel.mediaItems, sortOrder: $sortOrder) {
                 TableColumn("Title", value: \.title)
                 TableColumn("Artist", value: \.artist)
